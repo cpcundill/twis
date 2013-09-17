@@ -2,13 +2,13 @@ package core
 
 import org.joda.time.DateTime
 import scala.slick.driver.H2Driver.simple._
+import java.sql.Timestamp
 
 case class Tweet(id: TweetId, date: DateTime, text: String)
 
-// Definition of the tweets table
-object Tweets extends Table[(TweetId, String)]("TWEETS") {
-  def id = column[TweetId]("ID", O.PrimaryKey) // This is the primary key column
+object Tweets extends Table[(TweetId, Timestamp, String)]("TWEETS") {
+  def id = column[TweetId]("ID", O.PrimaryKey)
+  def date = column[Timestamp]("DATE")
   def text = column[String]("TEXT")
-  // Every table needs a * projection with the same type as the table's type parameter
-  def * = id ~ text
+  def * = id ~ date ~ text
 }

@@ -8,13 +8,16 @@ class TwitterClient(val pageSize: Int = 100) {
     search(query, 0, pageSize)
   }
 
-  def search(query: String, minId: Int): QueryResult = {
+  def search(query: String, minId: Long): QueryResult = {
     search(query, minId, pageSize)
   }
 
-  def search(query: String, minId: Int, pageSize: Int): QueryResult = {
+  def search(query: String, minId: Long, pageSize: Int): QueryResult = {
     val twitter = TwitterFactory.getSingleton()
-    val result = twitter.search(new Query(query))
+    val twitterQuery = new Query(query)
+    twitterQuery.setCount(pageSize)
+    twitterQuery.setSinceId(minId)
+    val result = twitter.search(twitterQuery)
     result
   }
 
