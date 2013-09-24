@@ -7,7 +7,7 @@ import play.api.Logger
 class TweetReader extends Actor with TweetOperations {
 
   def receive = {
-    case a => Logger.info(find.toString)
+    case a => sender ! find
   }
 
 }

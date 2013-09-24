@@ -1,0 +1,12 @@
+@(tweets: List[core.Tweet])
+
+
+    <ul>
+    @for(tweet <- tweets) {
+        <li>
+            @tweet.id - @tweet.date <br/>
+            @tweet.text
+        </li>
+    }
+    </ul>
+

@@ -2,7 +2,7 @@ package core
 
 import play.api.Play.current
 import play.api.db.DB
-import scala.slick.session.{Session, Database}
+import scala.slick.session.Database
 import scala.slick.driver.H2Driver.simple._
 import org.joda.time.DateTime
 import java.sql.Timestamp
@@ -23,7 +23,7 @@ trait TweetOperations extends Logging {
     Query(Tweets.map(_.id).max).first.getOrElse(0)
   }
 
-  def withDatabaseSession[T](f: scala.slick.session.Session => T): T =
+  private def withDatabaseSession[T](f: scala.slick.session.Session => T): T =
     Database.forDataSource(DB.getDataSource()) withSession { s => f(s) }
 
 }
