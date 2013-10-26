@@ -10,13 +10,13 @@ import java.sql.Timestamp
 trait TweetOperations extends Logging {
 
   def create(t: Tweet) = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    Tweets.insert(t.id, new Timestamp(t.date.getMillis), t.text)
+    Tweets.insert(t)
   }
 
   def read(id: TweetId) = ???
 
   def find: List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    Query(Tweets).list.map(a => Tweet(a._1, new DateTime(a._2), a._3))
+    Query(Tweets).list
   }
 
   def getMaxId: Long = withDatabaseSession { implicit s: scala.slick.session.Session =>

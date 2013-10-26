@@ -14,15 +14,15 @@ class TweetCurator extends Actor with TweetOperations {
   def receive = {
 
     case a: String =>
-
       val result = client.search(a, getMaxId)
       result.getTweets.map(mapStatus).foreach(create)
 
-    case unknown => logger.warn(s"What to do with $unknown ?")
+    case unknown =>
+      logger.warn(s"What to do with $unknown ?")
   }
 
   private def mapStatus(s: Status): Tweet = {
-    Tweet(s.getId, new DateTime(s.getCreatedAt), s.getText)
+    Tweet(s.getId, new DateTime(s.getCreatedAt), s.getText, None)
   }
 
 }
