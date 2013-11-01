@@ -10,12 +10,15 @@ import play.api.Logger
 class TweetCurator extends Actor with TweetOperations {
 
   val client = new TwitterClient
+  val logger = Logger(this.getClass)
 
   def receive = {
 
     case a: String =>
+      logger.info(s"Started curating of tweets with search string: '$a'.")
       val result = client.search(a, getMaxId)
       result.getTweets.map(mapStatus).foreach(create)
+      logger.info(s"Finished curating tweets.  Got ${result.getCount} tweets.")
 
     case unknown =>
       logger.warn(s"What to do with $unknown ?")

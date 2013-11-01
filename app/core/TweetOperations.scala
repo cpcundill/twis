@@ -5,9 +5,9 @@ import play.api.db.DB
 import scala.slick.session.Database
 import scala.slick.driver.H2Driver.simple._
 import org.joda.time.DateTime
-import java.sql.Timestamp
+import com.github.tototoshi.slick.JodaSupport._  // Stay boy!
 
-trait TweetOperations extends Logging {
+trait TweetOperations {
 
   def create(t: Tweet) = withDatabaseSession { implicit s: scala.slick.session.Session =>
     Tweets.insert(t)
@@ -17,6 +17,11 @@ trait TweetOperations extends Logging {
 
   def find: List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
     Query(Tweets).list
+  }
+
+  def find(from: DateTime, to: DateTime): List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+    Query(Tweets).filter(_.date >= from).filter(_.date <= to).list
+    //for (t <- Tweets if t.date >= from) yield t
   }
 
   def getMaxId: Long = withDatabaseSession { implicit s: scala.slick.session.Session =>

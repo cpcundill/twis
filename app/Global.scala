@@ -13,7 +13,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     super.onStart(app)
     val tweetCurator = Akka.system.actorOf(Props[TweetCurator], "tweetCurator")
-    Akka.system.scheduler.schedule(0.seconds, 5.minutes, tweetCurator, "#Scala OR #Akka OR #Scalaz exclude:retweets")
+    Akka.system.scheduler.schedule(0.seconds, 5.minutes, tweetCurator, "#Scala OR #Akka OR #Scalaz OR #Playframework exclude:retweets")
     Akka.system.actorOf(Props[TweetReader], "tweetReader")
     Logger.info("Finished onStart()")
   }

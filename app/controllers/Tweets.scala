@@ -7,7 +7,12 @@ import core.Tweet
 import akka.util.Timeout
 
 import scala.concurrent.ExecutionContext
-import ExecutionContext.Implicits.global // stay boy!
+import ExecutionContext.Implicits.global
+import org.joda.time.{Interval, DateTime}
+import org.joda.time.format.ISODateTimeFormat
+
+// stay boy!
+import actors.messsages.{FindTweetsInRange, FindAllTweets}
 
 object Tweets extends Controller {
 
@@ -15,9 +20,18 @@ object Tweets extends Controller {
   implicit val timeout: Timeout = 5
 
   def index = Action { Async {
-    (tweetReader ? "go-find-em").mapTo[List[Tweet]]
-      .map { a => Ok(views.html.tweets.index(a))}
+    (tweetReader ? FindAllTweets).mapTo[List[Tweet]]
+      .map { tweets => Ok(views.html.tweets.index(tweets))}
     }
   }
+
+  def range(from: String, to: String) = Action { Async {
+    (tweetReader ? FindTweetsInRange(from, to)).mapTo[List[Tweet]]
+      .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to)))}
+    }
+  }
+
+  implicit private def stringToDateTime(isoDateString: String): DateTime =
+    ISODateTimeFormat.dateTimeParser().parseDateTime(isoDateString)
 
 }

@@ -1,5 +1,6 @@
 @(tweets: List[core.Tweet])
 
+@main("All Tweets") {
 
     <ul>
     @for(tweet <- tweets) {
@@ -9,4 +10,6 @@
         </li>
     }
     </ul>
+
+}
 
