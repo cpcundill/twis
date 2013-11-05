@@ -5,8 +5,8 @@ import com.typesafe.config.ConfigFactory
 
 class WordpressClient {
 
-  private val config = ConfigFactory.load("wordpress")
-  private val wordpress = new Wordpress(config.getString("user"), config.getString("password"), config.getString("url"))
+  private val config = ConfigFactory.load()
+  private val wordpress = new Wordpress(config.getString("wordpress.username"), config.getString("wordpress.password"), config.getString("wordpress.xmlRpcUrl"))
   private val publishNewPosts = false
 
   def createPost(title: String, content: String) = {

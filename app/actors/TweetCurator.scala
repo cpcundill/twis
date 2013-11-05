@@ -25,7 +25,7 @@ class TweetCurator extends Actor with TweetOperations {
   }
 
   private def mapStatus(s: Status): Tweet = {
-    Tweet(s.getId, s.getUser.getName, s.getUser.getScreenName, new DateTime(s.getCreatedAt), s.getText, None)
+    Tweet(s.getId, Some(s.getUser.getName), Some(s.getUser.getScreenName), new DateTime(s.getCreatedAt), s.getText, None)
   }
 
 }

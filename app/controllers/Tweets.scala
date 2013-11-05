@@ -11,7 +11,7 @@ import ExecutionContext.Implicits.global
 import org.joda.time.{Interval, DateTime}
 import org.joda.time.format.ISODateTimeFormat
 
-// stay boy!
+
 import actors.messsages.{FindTweetsInRange, FindAllTweets}
 
 object Tweets extends Controller {

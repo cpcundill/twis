@@ -1,15 +1,26 @@
 @(tweets: List[core.Tweet], range: org.joda.time.Interval)
 
-@main(s"Tweets between ${range.getStart} and ${range.getEnd}") {
+@main("Tweets in range") {
 
-<h3>Tweets between @range.getStart and @range.getEnd</h3>
-<ul>
-    @for(tweet <- tweets) {
-        <li>
-            @tweet.id - @tweet.date <br/>
-            @tweet.text
-        </li>
-    }
-    </ul>
+    <h1>Tweets between @range.getStart and @range.getEnd</h1>
 
-a}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Display name</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(tweet <- tweets) {
+            <tr>
+                <td>@tweet.date</td>
+                <td>@tweet.displayName</td>
+                <td>@tweet.text</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+}
