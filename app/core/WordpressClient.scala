@@ -1,15 +1,18 @@
 package core
 
 import net.bican.wordpress.{Page, Wordpress}
+import com.typesafe.config.ConfigFactory
 
 class WordpressClient {
 
-  val wordpress = new Wordpress("Chris Cundill", "coffeecake84", "http://www.cakesolutions.net/teamblogs/xmlrpc.php")
+  private val config = ConfigFactory.load("wordpress")
+  private val wordpress = new Wordpress(config.getString("user"), config.getString("password"), config.getString("url"))
+  private val publishNewPosts = false
 
   def createPost(title: String, content: String) = {
     val newPost = new Page()
     newPost.setTitle(title); newPost.setDescription(content)
-    wordpress.newPost(newPost, false)
+    wordpress.newPost(newPost, publishNewPosts)
   }
 
 }

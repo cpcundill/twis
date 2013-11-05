@@ -14,9 +14,9 @@ class TweetCurator extends Actor with TweetOperations {
 
   def receive = {
 
-    case a: String =>
-      logger.info(s"Started curating of tweets with search string: '$a'.")
-      val result = client.search(a, getMaxId)
+    case q: String =>
+      logger.info(s"Started curating of tweets with search string: '$q'.")
+      val result = client.search(q, getMaxId)
       result.getTweets.map(mapStatus).foreach(create)
       logger.info(s"Finished curating tweets.  Got ${result.getCount} tweets.")
 
@@ -25,7 +25,7 @@ class TweetCurator extends Actor with TweetOperations {
   }
 
   private def mapStatus(s: Status): Tweet = {
-    Tweet(s.getId, new DateTime(s.getCreatedAt), s.getText, None)
+    Tweet(s.getId, s.getUser.getName, s.getUser.getScreenName, new DateTime(s.getCreatedAt), s.getText, None)
   }
 
 }

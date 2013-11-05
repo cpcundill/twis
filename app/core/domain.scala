@@ -5,14 +5,16 @@ import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.JodaSupport._  // Stay boy!
 
 
-case class Tweet(id: TweetId, date: DateTime, text: String, link: Option[String])
+case class Tweet(id: TweetId, username: String, displayName: String, date: DateTime, text: String, link: Option[String])
 
 object Tweets extends Table[Tweet]("TWEETS") {
   def id = column[TweetId]("ID", O.PrimaryKey)
+  def username = column[String]("USERNAME")
+  def displayName = column[String]("DISPLAYNAME")
   def date = column[DateTime]("DATE")
   def text = column[String]("TEXT")
   def link = column[Option[String]]("LINK")
-  def * = id ~ date ~ text ~ link <> (Tweet , Tweet.unapply _)
+  def * = id ~ username ~ displayName ~ date ~ text ~ link <> (Tweet , Tweet.unapply _)
 }
 
 
