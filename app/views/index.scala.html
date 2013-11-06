@@ -1,8 +1,8 @@
-@(message: String)
+@()(implicit request: play.api.mvc.Request[AnyContent])
 
 @main("welcome") {
 
-    <div id="jumbotron">
+    <div class="jumbotron">
         <h1>Welcome to twist</h1>
         <p class="lead">
             The tool behind the #ThisWeekInScala weekly blog series.

@@ -19,13 +19,13 @@ object Tweets extends Controller {
   private val tweetReader = Akka.system().actorFor("akka://application/user/tweetReader")
   implicit val timeout: Timeout = 5
 
-  def index = Action { Async {
+  def index = Action { implicit request => Async {
     (tweetReader ? FindAllTweets).mapTo[List[Tweet]]
       .map { tweets => Ok(views.html.tweets.index(tweets))}
     }
   }
 
-  def range(from: String, to: String) = Action { Async {
+  def range(from: String, to: String) = Action { implicit request => Async {
     (tweetReader ? FindTweetsInRange(from, to)).mapTo[List[Tweet]]
       .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to)))}
     }

@@ -34,14 +34,10 @@ object Wordpress extends Controller {
         (tweetReader ? FindTweetsInRange(values._2, values._3)).mapTo[List[Tweet]].map ( tweets => {
           val interval = new Interval(values._2, values._3)
           wordpressClient.createPost(values._1, views.html.wordpress.tweets(tweets, interval).body)
-          Redirect(routes.Wordpress.created)
+          Ok
         })
       }
     )
-  }
-
-  def created = Action {
-    Ok(views.html.wordpress.index())
   }
 
 }
