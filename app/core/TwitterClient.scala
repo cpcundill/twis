@@ -2,17 +2,9 @@ package core
 
 import twitter4j.{QueryResult, Query, TwitterFactory}
 
-class TwitterClient(val pageSize: Int = 100) {
+class TwitterClient {
 
-  def search(query: String): QueryResult = {
-    search(query, 0, pageSize)
-  }
-
-  def search(query: String, minId: Long): QueryResult = {
-    search(query, minId, pageSize)
-  }
-
-  def search(query: String, minId: Long, pageSize: Int): QueryResult = {
+  def search(query: String, minId: Long = 0, pageSize: Int = 100): QueryResult = {
     val twitter = TwitterFactory.getSingleton()
     val twitterQuery = new Query(query)
     twitterQuery.setCount(pageSize)

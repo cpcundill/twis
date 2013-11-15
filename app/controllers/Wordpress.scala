@@ -12,6 +12,7 @@ import actors.messsages.FindTweetsInRange
 import org.joda.time.Interval
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 
 object Wordpress extends Controller {
@@ -19,7 +20,7 @@ object Wordpress extends Controller {
   private val wordpressClient = new WordpressClient
   private val tweetReader = Akka.system().actorFor("akka://application/user/tweetReader")
   private val jodaDateMapping = jodaDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
-  implicit val timeout: Timeout = 5
+  implicit val timeout: Timeout = 5 second
 
   val createForm = Form(
     tuple(
