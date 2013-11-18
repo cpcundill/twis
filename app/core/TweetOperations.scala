@@ -44,12 +44,12 @@ trait TweetOperations {
   }
 
   def find: List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    Query(Tweets).list
+    Query(Tweets).sortBy(_.date).list
   }
 
   def find(from: DateTime, to: DateTime): List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
     Query(Tweets).filter(_.date >= from).filter(_.date <= to)
-      .sortBy(_.rank).list
+      .sortBy(_.rank.desc).list
   }
 
   def getMaxId: Long = withDatabaseSession { implicit s: scala.slick.session.Session =>
