@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc.{Action, Controller}
-import core.{Tweet, WordpressClient}
+import core.{TweetOperations, Tweet, WordpressClient}
 
 import play.api.data.Forms._
 import play.api.data.Form
@@ -15,7 +15,7 @@ import ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 
-object Wordpress extends Controller {
+object Wordpress extends Controller with TweetOperations {
 
   private val wordpressClient = new WordpressClient
   private val tweetReader = Akka.system().actorFor("akka://application/user/tweetReader")
@@ -34,7 +34,9 @@ object Wordpress extends Controller {
       values => Async {
         (tweetReader ? FindTweetsInRange(values._2, values._3)).mapTo[List[Tweet]].map ( tweets => {
           val interval = new Interval(values._2, values._3)
-          wordpressClient.createPost(values._1, views.html.wordpress.tweets(tweets, interval).body)
+          val tweetsWithLinks = tweets.map { t => (t, readLinks(t.id)) }
+          val postContent = views.html.wordpress.tweets(tweetsWithLinks, interval).body.replaceAll("\\s+","")
+          wordpressClient.createPost(values._1, postContent)
           Ok
         })
       }

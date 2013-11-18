@@ -1,6 +1,6 @@
 package core
 
-import twitter4j.{QueryResult, Query, TwitterFactory}
+import twitter4j.{Status, QueryResult, Query, TwitterFactory}
 
 class TwitterClient {
 
@@ -11,6 +11,11 @@ class TwitterClient {
     twitterQuery.setSinceId(minId)
     val result = twitter.search(twitterQuery)
     result
+  }
+
+  def read(tweetId: Long): Status = {
+    val twitter = TwitterFactory.getSingleton()
+    twitter.showStatus(tweetId)
   }
 
 }

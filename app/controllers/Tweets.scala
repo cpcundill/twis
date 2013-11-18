@@ -13,11 +13,12 @@ import org.joda.time.format.ISODateTimeFormat
 import scala.concurrent.duration._
 
 
-import actors.messsages.{FindTweetsInRange, FindAllTweets}
+import actors.messsages.{RemoderateTweets, FindTweetsInRange, FindAllTweets}
 
 object Tweets extends Controller {
 
   private val tweetReader = Akka.system().actorSelection("akka://application/user/tweetReader")
+  private val tweetModerator = Akka.system().actorSelection("akka://application/user/tweetModerator")
   implicit val timeout: Timeout = 2 second
 
   def index = Action.async { implicit request =>
@@ -28,6 +29,11 @@ object Tweets extends Controller {
   def range(from: String, to: String) = Action.async { implicit request =>
     (tweetReader ? FindTweetsInRange(from, to)).mapTo[List[Tweet]]
       .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to)))}
+  }
+
+  def remoderate(from: String, to: String) = Action {
+    tweetModerator ! RemoderateTweets(from, to)
+    Ok("Remoderation started").as(TEXT)
   }
 
   implicit private def stringToDateTime(isoDateString: String): DateTime =

@@ -1,15 +1,18 @@
 package actors
 
 import akka.actor.Actor
-import core.TweetOperations
+import core.{TwitterClient, TweetOperations}
 import twitter4j.Status
-import actors.messsages.ModerateTweet
+import actors.messsages.{RemoderateTweets, ModerateTweet}
 import play.api.libs.ws.WS
 import scala.concurrent.{ExecutionContext, Future}
 import ExecutionContext.Implicits.global
 import scala.collection.JavaConversions._
+import scala.util.Try
 
 class TweetModerator(val lowQualityUrls: Set[String]) extends Actor with TweetOperations {
+
+  private val client = new TwitterClient
 
   def receive = {
 
@@ -17,8 +20,19 @@ class TweetModerator(val lowQualityUrls: Set[String]) extends Actor with TweetOp
       var rank = 1.0
       rank = rank - retweetPenalty(s)
       urlPenalty(s).map { penalty =>
-        update(t.copy(rank = rank - penalty))
+        val newRank = rank - penalty
+        logger.debug(s"Awarding Tweet ${t.id} rank score of $newRank")
+        update(t.copy(rank = newRank))
       }
+
+    case RemoderateTweets(from, to) =>
+      logger.info("Remoderation started")
+      find(from, to).foreach { tweet =>
+        Try(client.read(tweet.id)).map { status =>
+          self ! ModerateTweet(status, tweet)
+        }
+      }
+      logger.info("Remoderation finishing")
 
     case unknown =>
       logger.warn(s"What to do with $unknown ?")

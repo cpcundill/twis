@@ -7,11 +7,9 @@ import scala.slick.driver.H2Driver.simple._
 import org.joda.time.DateTime
 import com.github.tototoshi.slick.JodaSupport._
 import scala.util.Try
-import scala.util.Success
 import java.sql.{SQLException, SQLIntegrityConstraintViolationException}
 import play.api.Logger
-
-// Stay boy!
+import core.TweetLinks
 
 trait TweetOperations {
 
@@ -29,13 +27,20 @@ trait TweetOperations {
     TweetLinks.insert(l)
   }
 
-  def read(id: TweetId): TweetWithLinks = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    val foo = for {
-      l <- TweetLinks if l.tweetId === id
-      t <- l.tweet
-    } yield (t, l)
-    val results = foo.list
-    (results.head._1, results.map(_._2))
+  /*def read(id: TweetId): Option[TweetWithLinks] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+    val query = for {
+        (t, l) <- Tweets where (_.id === id) leftJoin TweetLinks on (_.id === _.tweetId)
+      } yield (t, l.?)
+    val results: List[(Tweet, Option[TweetLink])] = Query(query).list
+    if (results.isEmpty) None
+    else {
+      val foo = results.flatMap(_._2)
+      Some((results.head._1, foo))
+    }
+  } */
+
+  def readLinks(id: TweetId): List[TweetLink] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+    Query(TweetLinks).where(_.tweetId === id).list
   }
 
   def find: List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
@@ -43,8 +48,8 @@ trait TweetOperations {
   }
 
   def find(from: DateTime, to: DateTime): List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    Query(Tweets).filter(_.date >= from).filter(_.date <= to).list
-    //for (t <- Tweets if t.date >= from) yield t
+    Query(Tweets).filter(_.date >= from).filter(_.date <= to)
+      .sortBy(_.rank).list
   }
 
   def getMaxId: Long = withDatabaseSession { implicit s: scala.slick.session.Session =>

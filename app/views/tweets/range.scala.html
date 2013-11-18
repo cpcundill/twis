@@ -22,7 +22,7 @@
             <tr>
                 <td>@tweet.date</td>
                 <td>@tweet.displayName</td>
-                <td>@tweet.text</td>
+                <td>@tweet.text [@tweet.rank]</td>
             </tr>
         }
         </tbody>
@@ -64,6 +64,27 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <script id="modal-form-template" type="text/x-handlebars-template">
+        <p>
+            Create a draft post in Wordpress from these tweets.
+        </p>
+        <form id="pressThisForm" class="form-horizontal" role="form">
+            <input type="hidden" name="from" value="@range.getStart" />
+            <input type="hidden" name="to" value="@range.getEnd" />
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Post title</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Blog post title">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Save</button>
+                </div>
+            </div>
+        </form>
+    </script>
 
     <script id="modal-processing-template" type="text/x-handlebars-template">
         <p class="text-info">Processing</p>

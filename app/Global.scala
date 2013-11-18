@@ -16,7 +16,7 @@ object Global extends GlobalSettings {
     super.onStart(app)
 
     val tweetCurator = Akka.system.actorOf(Props[TweetCurator], "tweetCurator")
-    Akka.system.scheduler.schedule(0 seconds, 5 minutes, tweetCurator, "#Scala OR #Akka OR #Scalaz OR #Playframework exclude:retweets")
+    Akka.system.scheduler.schedule(0 seconds, 30 minutes, tweetCurator, "#Scala OR #Akka OR #Scalaz OR #Playframework exclude:retweets")
 
     val lowQualityUrls = ConfigFactory.load().getStringList("tweet.moderation.low-quality-urls").toSet
     Akka.system.actorOf(Props(classOf[TweetModerator], lowQualityUrls), "tweetModerator")

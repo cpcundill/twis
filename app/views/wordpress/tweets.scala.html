@@ -1,11 +1,14 @@
-@(tweets: List[core.Tweet], range: org.joda.time.Interval)
+@(tweets: List[core.TweetWithLinks], range: org.joda.time.Interval)
 
 <h3>Tweets between @range.getStart and @range.getEnd</h3>
 <ul>
     @for(tweet <- tweets) {
         <li>
-            @tweet.id - @tweet.username.getOrElse("?") - @tweet.displayName.getOrElse("?") - @tweet.date <br/>
-            @tweet.text
+            @tweet._1.id - @tweet._1.username.getOrElse("?") - @tweet._1.displayName.getOrElse("?") - @tweet._1.date <br/>
+            @tweet._1.text [@tweet._1.rank]<br/>
+            @for(link <- tweet._2) {
+                @link.url <br/>
+            }
         </li>
     }
     </ul>
