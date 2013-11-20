@@ -13,6 +13,8 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     anorm,
+    "org.mockito" % "mockito-all" % "1.9.5" % "test",
+    "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test",
     "org.twitter4j" % "twitter4j-core" % "3.0.3",
     "com.typesafe.slick" %% "slick" % "1.0.1",
     "org.slf4j" % "slf4j-nop" % "1.6.4", // Needed for slick

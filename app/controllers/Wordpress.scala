@@ -35,7 +35,7 @@ object Wordpress extends Controller with TweetOperations {
         (tweetReader ? FindTweetsInRange(values._2, values._3)).mapTo[List[Tweet]].map ( tweets => {
           val interval = new Interval(values._2, values._3)
           val tweetsWithLinks = tweets.map { t => (t, readLinks(t.id)) }
-          val postContent = views.html.wordpress.tweets(tweetsWithLinks, interval).body.replaceAll("\\s+","")
+          val postContent = views.html.wordpress.tweets(tweetsWithLinks, interval).body
           wordpressClient.createPost(values._1, postContent)
           Ok
         })

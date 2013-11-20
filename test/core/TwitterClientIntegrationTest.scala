@@ -12,7 +12,7 @@ class TwitterClientIntegrationTest extends Specification {
     "find index with hashtag #Scala" in {
       val result = twitterClient.search(searchOperator)
       result.getTweets must not be empty
-      result.getCount must be equalTo twitterClient.pageSize
+      result.getCount must be equalTo 100
     }
 
     "find index since a previous search" in {
