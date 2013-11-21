@@ -1,8 +1,8 @@
 package actors.messsages
 
 import org.joda.time.DateTime
-import core.Tweet
 import twitter4j.Status
+import domain.Tweet
 
 case object FindAllTweets
 case class FindTweetsInRange(from: DateTime, to: DateTime)

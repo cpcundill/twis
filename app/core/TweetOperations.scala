@@ -9,7 +9,9 @@ import com.github.tototoshi.slick.JodaSupport._
 import scala.util.Try
 import java.sql.{SQLException, SQLIntegrityConstraintViolationException}
 import play.api.Logger
-import core.TweetLinks
+import domain._
+import domain.TweetLink
+import domain.Tweet
 
 trait TweetOperations {
 

@@ -5,11 +5,10 @@ import core._
 import scala.collection.JavaConversions._
 import twitter4j.{URLEntity, Status}
 import org.joda.time.DateTime
-import core.TweetLink
-import core.Tweet
 import scala.Some
 import play.libs.Akka
 import actors.messsages.ModerateTweet
+import domain.{TweetId, TweetLink, Tweet}
 
 class TweetCurator extends Actor with TweetOperations {
 

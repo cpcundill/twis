@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc.{Action, Controller}
-import core.{TweetOperations, Tweet, WordpressClient}
+import core.{TweetOperations, WordpressClient}
 
 import play.api.data.Forms._
 import play.api.data.Form
@@ -13,6 +13,7 @@ import org.joda.time.Interval
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import domain.Tweet
 
 
 object Wordpress extends Controller with TweetOperations {

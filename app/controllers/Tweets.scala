@@ -3,7 +3,6 @@ package controllers
 import play.api.mvc.{Action, Controller}
 import play.libs.Akka
 import akka.pattern.ask
-import core.Tweet
 import akka.util.Timeout
 
 import scala.concurrent.ExecutionContext
@@ -14,6 +13,7 @@ import scala.concurrent.duration._
 
 
 import actors.messsages.{RemoderateTweets, FindTweetsInRange, FindAllTweets}
+import domain.Tweet
 
 object Tweets extends Controller {
 

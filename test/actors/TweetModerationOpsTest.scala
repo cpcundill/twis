@@ -91,7 +91,7 @@ class TweetModerationOpsTest extends Specification with Mockito with NoTimeConve
     "calculate a 1.0 penalty for a low quality URL" in {
       val status = mock[Status]
       val url = mock[URLEntity]
-      url.getExpandedURL returns "http://www.stackoverflow.com"
+      url.getExpandedURL returns "http://t.co/NUaVr5lIHc"
       status.getURLEntities returns Array(url)
       moderator.urlPenalty(status) must be_==(1.0).await(retries = 2, timeout = 2 seconds)
     }
