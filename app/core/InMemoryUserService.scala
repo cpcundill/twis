@@ -58,3 +58,15 @@ class InMemoryUserService(application: Application) extends UserServicePlugin(ap
     tokens = tokens.filter(!_._2.isExpired)
   }
 }
+
+case class WithProvider(provider: String) extends Authorization {
+  def isAuthorized(user: Identity) = {
+    user.identityId.providerId == provider
+  }
+}
+
+case object ScalaBlogMan extends Authorization {
+  def isAuthorized(user: Identity) = {
+    user.identityId.providerId == "twitter" && user.identityId.userId == "396830799"
+  }
+}

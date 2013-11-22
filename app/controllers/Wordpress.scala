@@ -1,7 +1,7 @@
 package controllers
 
-import play.api.mvc.{Action, Controller}
-import core.{TweetOperations, WordpressClient}
+import play.api.mvc.Controller
+import core.{ScalaBlogMan, TweetOperations, WordpressClient}
 
 import play.api.data.Forms._
 import play.api.data.Form
@@ -14,9 +14,10 @@ import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import domain.Tweet
+import securesocial.core.SecureSocial
 
 
-object Wordpress extends Controller with TweetOperations {
+object Wordpress extends Controller with TweetOperations with SecureSocial {
 
   private val wordpressClient = new WordpressClient
   private val tweetReader = Akka.system().actorFor("akka://application/user/tweetReader")
@@ -29,7 +30,7 @@ object Wordpress extends Controller with TweetOperations {
     )
   )
 
-  def create = Action { implicit request =>
+  def create = SecuredAction(ScalaBlogMan) { implicit request =>
     createForm.bindFromRequest.fold (
       formWithErrors => UnprocessableEntity,
       values => Async {
