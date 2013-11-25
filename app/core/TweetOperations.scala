@@ -17,7 +17,7 @@ trait TweetOperations {
 
   val logger = Logger(this.getClass)
 
-  def create(t: Tweet) = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def create(t: Tweet) = withDatabaseSession { implicit s =>
     Try(Tweets.insert(t)).recover {
       case e: SQLIntegrityConstraintViolationException =>
         logger.debug("Ignored primary key constraint violation due to expected overlap in processing")
@@ -25,7 +25,7 @@ trait TweetOperations {
     }
   }
 
-  def create(l: TweetLink) = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def create(l: TweetLink) = withDatabaseSession { implicit s =>
     TweetLinks.insert(l)
   }
 
@@ -41,7 +41,7 @@ trait TweetOperations {
     }
   } */
 
-  def readLinks(id: TweetId): List[TweetLink] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def readLinks(id: TweetId): List[TweetLink] = withDatabaseSession { implicit s =>
     Query(TweetLinks).where(_.tweetId === id).list
   }
 
@@ -49,16 +49,21 @@ trait TweetOperations {
     Query(Tweets).sortBy(_.date).list
   }
 
-  def find(from: DateTime, to: DateTime): List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def find(from: DateTime, to: DateTime): List[Tweet] = withDatabaseSession { implicit s =>
     Query(Tweets).filter(_.date >= from).filter(_.date <= to)
       .sortBy(_.rank.desc).list
   }
 
-  def getMaxId: Long = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def find(from: DateTime, to: DateTime, minRank: Double): List[Tweet] = withDatabaseSession { implicit s =>
+    Query(Tweets).filter(_.date >= from).filter(_.date <= to).filter(_.rank >= minRank)
+      .sortBy(_.rank.desc).list
+  }
+
+  def getMaxId: Long = withDatabaseSession { implicit s =>
     Query(Tweets.map(_.id).max).first.getOrElse(0)
   }
 
-  def update(t: Tweet) = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def update(t: Tweet) = withDatabaseSession { implicit s =>
     Query(Tweets).filter(_.id === t.id).update(t)
   }
 

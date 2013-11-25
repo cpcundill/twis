@@ -12,7 +12,7 @@ import org.joda.time.format.ISODateTimeFormat
 import scala.concurrent.duration._
 
 
-import actors.messsages.{RemoderateTweets, FindTweetsInRange, FindAllTweets}
+import actors.messsages.{FindTweetsInRangeWithRank, RemoderateTweets, FindTweetsInRange, FindAllTweets}
 import domain.Tweet
 import securesocial.core.SecureSocial
 import core.ScalaBlogMan
@@ -30,7 +30,12 @@ object Tweets extends Controller with SecureSocial {
 
   def range(from: String, to: String) = SecuredAction(ScalaBlogMan).async { implicit request =>
     (tweetReader ? FindTweetsInRange(from, to)).mapTo[List[Tweet]]
-      .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to)))}
+      .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to), 0))}
+  }
+
+  def rangeWithMinRank(from: String, to: String, minRank: Double) = SecuredAction(ScalaBlogMan).async { implicit request =>
+    (tweetReader ? FindTweetsInRangeWithRank(from, to, minRank)).mapTo[List[Tweet]]
+      .map { tweets => Ok(views.html.tweets.range(tweets, new Interval(from, to), minRank))}
   }
 
   def remoderate(from: String, to: String) = SecuredAction(ScalaBlogMan) {

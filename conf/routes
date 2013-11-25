@@ -6,6 +6,7 @@
 GET         /                                   controllers.Application.index
 
 GET         /tweets                             controllers.Tweets.index
+GET         /tweets/:from/:to/:minRank          controllers.Tweets.rangeWithMinRank(from, to, minRank: Double)
 GET         /tweets/:from/:to                   controllers.Tweets.range(from, to)
 PUT         /tweets/:from/:to/remoderate        controllers.Tweets.remoderate(from, to)
 
