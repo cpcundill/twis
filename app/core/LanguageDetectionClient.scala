@@ -19,8 +19,8 @@ class LanguageDetectionClient {
 
   def detect(text: String): Future[DetectionResponse] = {
     WS.url("http://ws.detectlanguage.com/0.2/detect").post(Map("key" -> Seq(key), "q" -> Seq(text))).map { response =>
-      val foo = (response.json \ "data" \ "detections").as[Seq[LanguageDetection]]
-      DetectionResponse(foo.maxBy(_.confidence).language)
+      val detections = (response.json \ "data" \ "detections").as[Seq[LanguageDetection]]
+      DetectionResponse(detections.maxBy(_.confidence).language)
     }
   }
 

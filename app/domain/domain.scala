@@ -28,42 +28,6 @@ object TweetLinks extends Table[TweetLink]("TWEET_LINKS") {
   def tweet = foreignKey("TL_T_FK", tweetId, Tweets)(_.id)
 }
 
-case class User(id: UserId, password: String)
-
-object Users extends Table[User]("USERS") {
-  def id = column[UserId]("ID", O.PrimaryKey)
-  def password = column[String]("PASSWORD")
-  def * = id ~ password <> (User , User.unapply _)
-}
-
-
-sealed trait Permission
-case object Basic extends Permission
-case object Admin extends Permission
-
-trait PermissionMapping {
-
-  implicit val boolTypeMapper = MappedTypeMapper.base[Permission, String](
-  { permission => permission match {
-    case Basic => "BASIC"
-    case Admin => "ADMIN"
-  }}, 
-  { str => str match {
-    case "BASIC" => Basic
-    case "ADMIN" => Admin
-  }})
-}
-
-case class UserPermission(id: Option[UserPermissionId], userId: UserId, permission: Permission)
-
-object UserPermissions extends Table[UserPermission]("USER_PERMISSIONS") with PermissionMapping {
-  def id = column[UserPermissionId]("ID", O.PrimaryKey, O.AutoInc)
-  def userId = column[UserId]("USER_ID")
-  def permission = column[Permission]("PERMISSION")
-  def * = id.? ~ userId ~ permission <> (UserPermission , UserPermission.unapply _)
-  def forInsert = userId ~ permission <> ({ t => UserPermission(None, t._1, t._2)}, { (tl: UserPermission) => Some((tl.userId, tl.permission))})
-  def user = foreignKey("UP_P_FK", userId, Users)(_.id)
-}
 
 
 

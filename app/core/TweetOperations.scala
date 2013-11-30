@@ -33,7 +33,7 @@ trait TweetOperations {
     Query(TweetLinks).where(_.tweetId === id).list
   }
 
-  def find: List[Tweet] = withDatabaseSession { implicit s: scala.slick.session.Session =>
+  def find: List[Tweet] = withDatabaseSession { implicit s =>
     Query(Tweets).sortBy(_.date).list
   }
 
