@@ -29,18 +29,6 @@ trait TweetOperations {
     TweetLinks.insert(l)
   }
 
-  /*def read(id: TweetId): Option[TweetWithLinks] = withDatabaseSession { implicit s: scala.slick.session.Session =>
-    val query = for {
-        (t, l) <- Tweets where (_.id === id) leftJoin TweetLinks on (_.id === _.tweetId)
-      } yield (t, l.?)
-    val results: List[(Tweet, Option[TweetLink])] = Query(query).list
-    if (results.isEmpty) None
-    else {
-      val foo = results.flatMap(_._2)
-      Some((results.head._1, foo))
-    }
-  } */
-
   def readLinks(id: TweetId): List[TweetLink] = withDatabaseSession { implicit s =>
     Query(TweetLinks).where(_.tweetId === id).list
   }

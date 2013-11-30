@@ -1,15 +1,18 @@
 @(tweets: List[domain.Tweet], range: org.joda.time.Interval, minRank: Double)(implicit request: play.api.mvc.Request[AnyContent])
 
+@import views.util.DateFormatter._
+
 @main("Tweets in range") {
 
-    <h1>Tweets between @range.getStart and @range.getEnd</h1>
 
     <button type="button" data-toggle="modal" data-target="#pressThisModal" class="btn btn-default btn-lg pull-right">
         <img src="@routes.Assets.at("images/wordpress-logo-notext-rgb.png")" style="width: 30px;" />
         Press this!
     </button>
 
-    <table>
+    <h1>Tweets between @jdt(range.getStart) and @jdt(range.getEnd)</h1>
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Date</th>
@@ -21,7 +24,7 @@
         <tbody>
         @for(tweet <- tweets) {
             <tr>
-                <td>@tweet.date</td>
+                <td class="nowrap">@jdt(tweet.date)</td>
                 <td>@tweet.displayName</td>
                 <td>@tweet.text</td>
                 <td>@tweet.rank</td>

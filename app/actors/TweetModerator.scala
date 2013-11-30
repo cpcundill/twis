@@ -9,7 +9,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import ExecutionContext.Implicits.global
 import scala.collection.JavaConversions._
 import scala.util.Try
-import play.api.http.HeaderNames
 import com.typesafe.config.ConfigFactory
 
 trait TweetModerationOps {

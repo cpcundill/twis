@@ -20,7 +20,7 @@ import securesocial.core.SecureSocial
 object Wordpress extends Controller with TweetOperations with SecureSocial {
 
   private val wordpressClient = new WordpressClient
-  private val tweetReader = Akka.system().actorFor("akka://application/user/tweetReader")
+  private val tweetReader = Akka.system().actorSelection("akka://application/user/tweetReader")
   private val jodaDateMapping = jodaDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
   implicit val timeout: Timeout = 5 second
 
@@ -30,7 +30,7 @@ object Wordpress extends Controller with TweetOperations with SecureSocial {
     )
   )
 
-  def create = SecuredAction(ScalaBlogMan) { implicit request =>
+  def create = SecuredAction(ajaxCall = true, authorize = ScalaBlogMan) { implicit request =>
     createForm.bindFromRequest.fold (
       formWithErrors => UnprocessableEntity,
       values => Async {
