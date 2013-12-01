@@ -15,12 +15,12 @@ import ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import domain.Tweet
 import securesocial.core.SecureSocial
+import akka.actor.ActorRef
 
 
-object Wordpress extends Controller with TweetOperations with SecureSocial {
+class Wordpress(tweetReader: ActorRef) extends Controller with TweetOperations with SecureSocial {
 
   private val wordpressClient = new WordpressClient
-  private val tweetReader = Akka.system().actorSelection("akka://application/user/tweetReader")
   private val jodaDateMapping = jodaDate("yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
   implicit val timeout: Timeout = 5 second
 

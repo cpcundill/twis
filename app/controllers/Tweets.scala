@@ -16,11 +16,10 @@ import actors.messsages.{FindTweetsInRangeWithRank, RemoderateTweets, FindTweets
 import domain.Tweet
 import securesocial.core.SecureSocial
 import core.ScalaBlogMan
+import akka.actor.ActorRef
 
-object Tweets extends Controller with SecureSocial {
+class Tweets(tweetReader: ActorRef, tweetModerator: ActorRef) extends Controller with SecureSocial {
 
-  private val tweetReader = Akka.system().actorSelection("akka://application/user/tweetReader")
-  private val tweetModerator = Akka.system().actorSelection("akka://application/user/tweetModerator")
   implicit val timeout: Timeout = 2 second
 
   def index = SecuredAction(ScalaBlogMan).async { implicit request =>

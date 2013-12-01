@@ -7,7 +7,6 @@ import actors.messsages.{FindTweetsInRangeWithRank, FindTweetsInRange, FindAllTw
 
 class TweetReader extends Actor with TweetOperations {
 
-
   def receive = {
     case FindAllTweets => sender ! find
     case FindTweetsInRange(from, to) => sender ! find(from, to)

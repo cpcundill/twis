@@ -19,17 +19,14 @@ trait TweetModerationOps {
   def withCalculatedRank[T](s: Status)(f: Double => T): Future[T] = {
     var rank = 1.0
     rank = rank - retweetPenalty(s)
-    val futurePenalty = for {
+    for {
       a <- urlPenalty(s)
       b <- languagePenalty(s)
-    } yield (a + b)
-    futurePenalty.map { penalty =>
-      val newRank = (rank - penalty).max(0)
-      f(newRank)
-    }
+      c = rank - (a + b) max 0
+    } yield f(c)
   }
 
-  def retweetPenalty(s: Status) = {
+  def retweetPenalty(s: Status): Double = {
     if (s.getRetweetCount == 0) 0.3
     else if (s.getRetweetCount < 5) 0.2
     else if (s.getRetweetCount < 10) 0.1
@@ -44,7 +41,7 @@ trait TweetModerationOps {
         WS.url(url).withFollowRedirects(true).get().map { r =>
           if (r.status == 200) {
             val ultimateUrl = r.getAHCResponse.getUri.toURL.toString
-            if (lowQualityDomains.exists(lqu => ultimateUrl.contains(lqu)))
+            if (lowQualityDomains.exists(ultimateUrl.contains))
               1.0
             else
               0.0

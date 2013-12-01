@@ -1,6 +1,6 @@
 package actors
 
-import akka.actor.Actor
+import akka.actor.{ActorRef, Actor}
 import core._
 import scala.collection.JavaConversions._
 import twitter4j.{URLEntity, Status}
@@ -10,10 +10,10 @@ import play.libs.Akka
 import actors.messsages.ModerateTweet
 import domain.{TweetId, TweetLink, Tweet}
 
-class TweetCurator extends Actor with TweetOperations {
+class TweetCurator(tweetModerator: ActorRef) extends Actor with TweetOperations {
 
   private val client = new TwitterClient
-  private val tweetModerator = Akka.system().actorSelection("akka://application/user/tweetModerator")
+  //private val tweetModerator = Akka.system().actorSelection("akka://application/user/tweetModerator")
 
   def receive = {
 

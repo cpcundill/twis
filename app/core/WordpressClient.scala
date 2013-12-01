@@ -9,7 +9,7 @@ class WordpressClient {
   private val wordpress = new Wordpress(config.getString("wordpress.username"), config.getString("wordpress.password"), config.getString("wordpress.xmlRpcUrl"))
   private val publishNewPosts = false
 
-  def createPost(title: String, content: String) = {
+  def createPost(title: String, content: String): Unit = {
     val newPost = new Page()
     newPost.setTitle(title); newPost.setDescription(content)
     wordpress.newPost(newPost, publishNewPosts)
