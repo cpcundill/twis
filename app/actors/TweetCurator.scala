@@ -13,7 +13,6 @@ import domain.{TweetId, TweetLink, Tweet}
 class TweetCurator(tweetModerator: ActorRef) extends Actor with TweetOperations {
 
   private val client = new TwitterClient
-  //private val tweetModerator = Akka.system().actorSelection("akka://application/user/tweetModerator")
 
   def receive = {
 
