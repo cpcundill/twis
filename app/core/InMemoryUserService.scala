@@ -4,6 +4,7 @@ import play.api.{Logger, Application}
 import securesocial.core._
 import securesocial.core.providers.Token
 import securesocial.core.IdentityId
+import com.typesafe.config.ConfigFactory
 
 
 /**
@@ -66,7 +67,10 @@ case class WithProvider(provider: String) extends Authorization {
 }
 
 case object ScalaBlogMan extends Authorization {
-  def isAuthorized(user: Identity) = {
-    user.identityId.providerId == "twitter" && user.identityId.userId == "396830799"
-  }
+
+  lazy val authorizedTwitterIds = ConfigFactory.load().getStringList("scalablogmen.twitterIds")
+
+  override def isAuthorized(user: Identity) =
+    if (user.identityId.providerId != "twitter") false
+    else authorizedTwitterIds contains user.identityId.userId
 }
